@@ -84,7 +84,7 @@ def get_vesselfinder() :
 
     driver.quit()
 
-    print(value)
+    #print(value)
 
     fig = go.Figure(data=[go.Table(header=dict(values=['ETA', 'Vessel', 'Built', 'GT', 'DWT', 'Size (m)']),
                         cells=dict(values=value))
