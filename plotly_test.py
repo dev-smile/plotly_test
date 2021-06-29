@@ -4,6 +4,7 @@ from bs4 import BeautifulSoup
 from selenium import webdriver
  
 """
+
 value = plotly 테이블의 값 배열
 """
 
@@ -93,4 +94,5 @@ def get_vesselfinder() :
 
 
 if __name__ == "__main__":
+    get_incheonpilot()
     get_vesselfinder()
