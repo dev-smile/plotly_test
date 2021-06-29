@@ -1,39 +1,45 @@
+"""
+크롤링 하여 Plotly Table로 출력
+ > value = plotly 테이블의 값 리스트
+ >
+"""
+
 import urllib.request
 import plotly.graph_objects as go
 from bs4 import BeautifulSoup
 from selenium import webdriver
- 
-"""
 
-value = plotly 테이블의 값 배열
-"""
 
-def get_incheonpilot() :
+def get_incheonpilot() -> None:
+    # crawled from 인천항 도선사회 - 도선 예보 현황
     print("인천 도선사회 도선 예보 현황")
     date = input("날짜를 입력하시오. : ")
     url = 'http://www.incheonpilot.com/pilot/pilot04_01.asp?Datepicker_date='
-    req = urllib.request.urlopen(url+date)
+    req = urllib.request.urlopen(url + date)
     res = req.read()
 
-    soup = BeautifulSoup(res,'html.parser')
-    my_titles = soup.select( 'body > div > div > div > div > div > div > table > tr > td' ) 
+    soup = BeautifulSoup(res, 'html.parser')
+    my_titles = soup.select('body > div > div > div > div > div > div > table > tr > td')
     value = []
     i = 0
 
-    for i in range(12) :
+    for i in range(12):
         value.append([])
 
-    for titles in my_titles :
-        if i > 39 :
-            value[(i-28)%12].append(str(titles.text).replace(u'\xa0', u' ').strip())
+    for titles in my_titles:
+        if i > 39:
+            value[(i - 28) % 12].append(str(titles.text).replace(u'\xa0', u' ').strip())
         i += 1
 
-    fig = go.Figure(data=[go.Table(header=dict(values=['No', '도선사', '시간', '선명', '갑문', '도선구간', '접안', '톤수', '홀수', '대리점', '예선', 'JOB NO']),
-                    cells=dict(values=value))
-                        ])
+    fig = go.Figure(data=[
+        go.Table(header=dict(values=['No', '도선사', '시간', '선명', '갑문', '도선구간', '접안', '톤수', '홀수', '대리점', '예선', 'JOB NO']),
+                 cells=dict(values=value))
+        ])
     fig.show()
 
-def get_vesselfinder() : 
+
+def get_vesselfinder() -> None:
+    #crawled from VesselFinder
     options = webdriver.ChromeOptions()
     options.add_experimental_option("excludeSwitches", ["enable-logging"])
     driver = webdriver.Chrome('chromedriver', options=options)
@@ -52,7 +58,7 @@ def get_vesselfinder() :
     select = 0
     select_id = ''
 
-    while select > 5 or select < 1 :
+    while select > 5 or select < 1:
         select = int(input("메뉴를 선택하시오. : "))
         if select == 1:
             select_id = 'expected'
@@ -66,10 +72,10 @@ def get_vesselfinder() :
     selected_soup = vesselfinder_soup.find('section', id=select_id)
     value = []
 
-    for i in range(6) :
+    for i in range(6):
         value.append([])
 
-    for i in range(20) :
+    for i in range(20):
         middle_data = selected_soup.select("table > tbody > tr")[i]
         value[0].append(middle_data.select('td')[0].text)
         value[2].append(middle_data.select('td')[2].text)
@@ -77,20 +83,19 @@ def get_vesselfinder() :
         value[4].append(middle_data.select('td')[4].text)
         value[5].append(middle_data.select('td')[5].text)
 
-    vessel = selected_soup.find_all('div', class_ = 'named-title')
+    vessel = selected_soup.find_all('div', class_='named-title')
 
-    for titles in vessel :
+    for titles in vessel:
         value[1].append(str(titles.text).strip())
 
     driver.quit()
 
-    #print(value)
+    # print(value)
 
     fig = go.Figure(data=[go.Table(header=dict(values=['ETA', 'Vessel', 'Built', 'GT', 'DWT', 'Size (m)']),
-                        cells=dict(values=value))
-                            ])
+                                   cells=dict(values=value))
+                          ])
     fig.show()
-
 
 
 if __name__ == "__main__":
