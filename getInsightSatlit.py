@@ -29,6 +29,7 @@ for image in json_object3:
     except URLError as e:
         print("URLError :", e)
 
+# 조절 없는 요청으로 서버 측에서 에러 발생
 # urllib.error.HTTPError: HTTP Error 500: Internal Server Error
 # http.client.RemoteDisconnected: Remote end closed connection without response
 
