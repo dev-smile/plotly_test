@@ -1,15 +1,14 @@
-import time
 import urllib.request
 import json
 from urllib.request import urlretrieve
-import time
 from urllib.error import HTTPError
 from urllib.error import URLError
 
 url = 'http://apis.data.go.kr/1360000/SatlitImgInfoService/getInsightSatlit?' \
       'serviceKey=Kk6GfZmcpKlmvK0ufG8JnZs8nZhJhSjiEWY6Qs6SoOdLkZLcdNam6Fv8JJBMVKJaXUkCz3%2B6o3M4O1nW6YMdRw%3D%3D&' \
       'pageNo=1&numOfRows=10&dataType=JSON&sat=G2&' \
-      'data=vi006&area=ko&time=20210630'
+      'data=vi006&area=ko&time=20210708'
+# 조회 기간은 오늘 기준으로 1일 전까지
 req = urllib.request.urlopen(url)
 res = req.read()
 
